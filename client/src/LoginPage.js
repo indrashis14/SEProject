@@ -4,25 +4,22 @@ import { useHistory } from 'react-router-dom';
 function LoginPage() {
   const history = useHistory();
 
-  function handleUserClick() {
-    // redirect to user login page
-    history.push('/user-login');
+  function handleStudentClick() {
+    history.push('/student');
   }
 
-  function handleStudentClick() {
-    // redirect to student login page
-    history.push('/student-login');
+  function handleAdminClick() {
+    history.push('/admin');
   }
 
   function handleVendorClick() {
-    // redirect to vendor login page
-    history.push('/vendor-login');
+    history.push('/vendor');
   }
 
   return (
     <div>
-      <button onClick={handleUserClick}> User </button>
       <button onClick={handleStudentClick}> Student </button>
+      <button onClick={handleAdminClick}> Admin </button>
       <button onClick={handleVendorClick}> Vendor </button>
     </div>
   );
