@@ -6,18 +6,22 @@ import StudentLoginForm from './StudentLoginForm';
 import VendorLoginPage from './VendorLoginPage';
 import LoginPage from './LoginPage';
 import StudentSignupForm from './StudentSignupForm'
+import VendorSignupPage from './VendorSignupPage';
+import VendorPage from './VendorPage'
 
 function App() {
-  return (
-    <Router>
-      <Route exact path="/" component={props => <LoginPage {...props} />} />
-      <Route exact path="/admin" component={props => <AdminLoginPage {...props} />}/>
-      <Route exact path="/student" component={props => <StudentLoginPage   {...props} />}/>
-      <Route exact path="/vendor" component={props => <VendorLoginPage {...props} />} />
-      <Route exact path="/student-signup" component={props => <StudentSignupForm {...props} />}/>
-      <Route exact path="/student-login" component={props => <StudentLoginForm {...props} />}/>
-    </Router>
-  );
+    return (
+        <Router>
+            <Route exact path="/" component={props => <LoginPage {...props} />} />
+            <Route exact path="/admin" component={props => <AdminLoginPage {...props} />} />
+            <Route exact path="/student" component={props => <StudentLoginPage   {...props} />} />
+            <Route exact path="/vendor" component={props => <VendorPage {...props} />} />
+            <Route exact path="/vendor/signup" component={props => <VendorSignupPage {...props} />} />
+            <Route exact path="/vendor/login" component={props => <VendorLoginPage {...props} />} />
+            <Route exact path="/student-signup" component={props => <StudentSignupForm {...props} />} />
+            <Route exact path="/student-login" component={props => <StudentLoginForm {...props} />} />
+        </Router>
+    );
 }
 
 export default App;
