@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt")
 
 mongoose.connect('mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
+//make a new user schema for the user signup details
 const userSchema = new mongoose.Schema({
     userName: String,
     email: String,
@@ -78,9 +79,9 @@ app.post('/student-signup', (req, res) => {
     console.log(`Received user data: ${userName}, ${password}, ${email}, ${mobile}`);
     res.json({ message: 'User created successfully' });
 
-    user.save()
-        .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+  user.save()
+    .then(() => console.log('User added!'))
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 
