@@ -13,14 +13,14 @@ function LoginPage() {
   }
 
   function handleVendorClick() {
-    history.push('/vendor');
+    history.push('/vendor/login');
   }
 
   return (
     <div>
-      <button onClick={handleStudentClick}> Student </button>
-      <button onClick={handleAdminClick}> Admin </button>
-      <button onClick={handleVendorClick}> Vendor </button>
+      <button className="my-button" onClick={handleStudentClick}> Student </button>
+      <button className="my-button" onClick={handleAdminClick}> Admin </button>
+      <button className="my-button" onClick={handleVendorClick}> Vendor </button>
     </div>
   );
 }

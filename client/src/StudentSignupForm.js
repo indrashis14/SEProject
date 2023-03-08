@@ -32,9 +32,9 @@ const StudentSignupForm = () => {
   };
 
   return (
-    <div>
-      <h2>Create User</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='login-container'>
+      <h1 className="login-header">Create User</h1>
+      <form className="login-form" onSubmit={handleSubmit}>
         <label>
           Username:
           <input type="text" value={userName} onChange={event => setUsername(event.target.value)} />

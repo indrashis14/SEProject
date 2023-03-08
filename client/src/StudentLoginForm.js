@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './Login.css';
 // const StudentSignupForm = () => {
 //   const [userName, setUsername] = useState('');
 //   const [password, setPassword] = useState('');
@@ -36,11 +36,11 @@ import React, { useState } from 'react';
     };
   
     return (
-      <div>
-        <h2>Login User</h2>
-        <form onSubmit={handleSubmit}>
+      <div className='login-container'>
+        <h1 className="login-header">Login</h1>
+        <form className="login-form" onSubmit={handleSubmit}>
           <label>
-            Username:
+            Username:      
             <input type="text" value={userName} onChange={event => setUsername(event.target.value)} />
           </label>
           <br />        

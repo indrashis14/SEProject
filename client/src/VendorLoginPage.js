@@ -4,6 +4,7 @@ import { useHistory, Redirect } from 'react-router-dom';
 const VendorLoginPage = () => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const history = useHistory();
     // const [email, setEmail] = useState('');
     // const [mobile, setMobile] = useState('');
 
@@ -25,7 +26,8 @@ const VendorLoginPage = () => {
                 console.log(data)
                 localStorage.setItem('vendor', userName)
                 localStorage.setItem('authenticated', true)
-                return <Redirect to="/vendor" />
+                if(data === 'User logged in!') history.push('/vendor');
+                else history.push('/vendor/invalid-login');
             })
             .catch(error => console.error(error));
 
@@ -35,9 +37,9 @@ const VendorLoginPage = () => {
     };
 
     return (
-        <div>
-            <h2>Login Vendor</h2>
-            <form onSubmit={handleSubmit}>
+        <div className='login-container'>
+            <h1>Login Vendor</h1>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <label>
                     Username:
                     <input type="text" value={userName} onChange={event => setUsername(event.target.value)} />
@@ -50,6 +52,7 @@ const VendorLoginPage = () => {
                 <br />
                 <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
+            <br/>
             <a href='/vendor/signup'>SignUP</a>
         </div>
 

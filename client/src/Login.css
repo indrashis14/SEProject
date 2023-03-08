@@ -1,0 +1,94 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .login-header {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  label {
+    margin-bottom: 0.5rem;
+  }
+  
+  input {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: #0077cc;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005fa3;
+  }
+
+  header {
+    background-color: #ffffff; /* set the background color of the header */
+    border-top: 3px solid #0077cc; /* add a 3px solid border on the top of the header */
+  }
+  .my-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 250px 2px;
+    margin-left: 300px;
+    cursor: pointer;
+  }
+  .my-button2 {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 250px 2px;
+    margin-left: 400px;
+    cursor: pointer;
+  }
+  .my-button3 {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 250px 2px;
+    margin-left: 400px;
+    cursor: pointer;
+  }
+  body {
+    background-image: url('https://i.pinimg.com/originals/40/e6/ce/40e6ce55cf2491002ddbee462e28fb53.png'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+  }
+  

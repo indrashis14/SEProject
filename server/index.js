@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require("bcrypt")
-
-mongoose.connect('mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-
+const uri = 'mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority';
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected!'))
+    .catch(err => console.log('Error connecting to MongoDB:', err));
 //make a new user schema for the user signup details
 const userSchema = new mongoose.Schema({
     userName: String,

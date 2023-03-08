@@ -12,8 +12,8 @@ const StudentLoginPage = () => {
     }
   return (
     <div>
-      <button onClick={handleLoginClick}> Login as User </button>
-      <button onClick={handleSignupClick}> Sign up</button>
+      <button className='my-button2' onClick={handleLoginClick}> Login as User </button>
+      <button className='my-button2' onClick={handleSignupClick}> Sign up</button>
     </div>
   )
 }

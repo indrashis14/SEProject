@@ -32,9 +32,9 @@ const VendorSignupPage = () => {
     };
 
     return (
-        <div>
-            <h2>Create a Vendor Account</h2>
-            <form onSubmit={handleSubmit}>
+        <div className='login-container'>
+            <h1>Create a Vendor Account</h1>
+            <form className="login-form" onSubmit={handleSubmit}>
                 <label>
                     Username:
                     <input type="text" value={userName} onChange={event => setUsername(event.target.value)} />
@@ -57,7 +57,8 @@ const VendorSignupPage = () => {
                 <br />
                 <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
-            <a href='/vendor'>Login</a>
+            <br/>
+            <a href='/vendor/login'>Login</a>
         </div>
     );
 };
