@@ -9,6 +9,7 @@ import StudentSignupForm from './StudentSignupForm'
 import VendorSignupPage from './VendorSignupPage';
 import VendorPage from './VendorPage'
 import VendorInvalidLoginPage from './VendorInvalidLoginPage'
+import VendorAddItemPage from './VendorAddItemPage'
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
             <Route exact path="/vendor/invalid-login" component={props => <VendorInvalidLoginPage {...props} />} />
             <Route exact path="/student-signup" component={props => <StudentSignupForm {...props} />} />
             <Route exact path="/student-login" component={props => <StudentLoginForm {...props} />} />
+            <Route exact path="/vendor/addItem" component={props => <VendorAddItemPage {...props} />} />
         </Router>
     );
 }

@@ -1,0 +1,115 @@
+.heading {
+    width: auto;
+    text-align: center;
+}
+
+.container {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+#navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+
+
+.navitem {
+    float: left;
+    text-align: center;
+    width: 150px;
+    border-radius: 5px;
+    border: black 1px solid;
+    padding: 14px 16px;
+}
+
+.navitem:hover {
+    cursor: pointer;
+}
+
+.navitem_selected {
+    color: white;
+    cursor: pointer;
+    background-color: black;
+}
+
+#menu {
+    padding: 30px;
+}
+
+.menuitem {
+    padding: 10px;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    /* margin-top: 20px; */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: #0077cc;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.toggle-btn {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-btn input[type=checkbox] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-btn .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 10px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color .3s;
+}
+
+.toggle-btn .slider:before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    bottom: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    transition: transform .3s;
+}
+
+.toggle-btn input[type=checkbox]:checked+.slider {
+    background-color: #2196f3;
+}
+
+.toggle-btn input[type=checkbox]:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+.itemname {
+    padding: 0;
+    width: 100px;
+    /* padding: 20px; */
+}
+
+.itemprice {
+    margin-right: 50px;
+}

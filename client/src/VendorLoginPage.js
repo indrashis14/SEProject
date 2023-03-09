@@ -24,12 +24,22 @@ const VendorLoginPage = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                localStorage.setItem('vendor', userName)
-                localStorage.setItem('authenticated', true)
-                if(data === 'User logged in!') history.push('/vendor');
-                else history.push('/vendor/invalid-login');
+                console.log('result: ', data['result'])
+                if (data['isLoggedIn']) {
+                    localStorage.setItem('vendor_id', data['id'])
+                    localStorage.setItem('vendor', userName)
+                    localStorage.setItem('authenticated', true)
+                    history.push('/vendor');
+                }
+                else {
+                    localStorage.removeItem('vendor')
+                    localStorage.removeItem('id')
+                    localStorage.setItem('authenticated', false)
+                    history.push('/vendor/login')
+                };
+                history.push('/vendor')
             })
-            .catch(error => console.error(error));
+            .catch(error => { console.error(error); history.push('/vendor/login/') });
 
         setUsername('');
         setPassword('');
@@ -52,7 +62,7 @@ const VendorLoginPage = () => {
                 <br />
                 <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
-            <br/>
+            <br />
             <a href='/vendor/signup'>SignUP</a>
         </div>
 
