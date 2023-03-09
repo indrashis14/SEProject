@@ -8,6 +8,7 @@ const uri = 'mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected!'))
     .catch(err => console.log('Error connecting to MongoDB:', err));
+
 //make a new user schema for the user signup details
 const userSchema = new mongoose.Schema({
     userName: String,
@@ -21,9 +22,6 @@ const vendorSchema = new mongoose.Schema({
     password: String,
     mobile: String
 })
-
-
-
 // Hash password before saving
 userSchema.pre("save", async function (next) {
     try {
@@ -149,6 +147,7 @@ app.post("/vendor/signup", async (req, res) => {
     })
     vuser.save().then((item) => { console.log(`data saved successfully ${item}`); res.json({ "result": "success" }) }).catch(err => { console.log(err); res.status(400).json({ "result": "bad request" }) })
 })
+//vendor login check
 app.post("/vendor/login", async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
@@ -170,5 +169,19 @@ app.post("/vendor/login", async (req, res) => {
             }
         })
     }
+})
+//admin password check
+app.post("/admin", async (req, res) => {
+    const { userName, password } = req.body;
+    if (!userName || !password) {
+        return res.status(400).json({ "result": "invalid data" });
+    }
+    if (userName === 'admin' && password === 'admin') {
+        // If the credentials are correct, send a success response
+        res.status(200).json({ message: 'Login successful' });
+      } else {
+        // If the credentials are incorrect, send an error response
+        res.status(401).json({ message: 'Invalid username or password' });
+      }
 })
 app.listen(5000, () => { console.log("Server listening on port 5000") })

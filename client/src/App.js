@@ -9,12 +9,16 @@ import StudentSignupForm from './StudentSignupForm'
 import VendorSignupPage from './VendorSignupPage';
 import VendorPage from './VendorPage'
 import VendorInvalidLoginPage from './VendorInvalidLoginPage'
+import AdminInvalidLoginPage from './AdminInvalidLoginPage';
+import AdminDashboard from './AdminDashboard'
 
 function App() {
     return (
         <Router>
             <Route exact path="/" component={props => <LoginPage {...props} />} />
             <Route exact path="/admin" component={props => <AdminLoginPage {...props} />} />
+            <Route exact path="/invalid-admin" component={props => <AdminInvalidLoginPage {...props} />} />
+            <Route exact path="/admin-dashboard" component={props => <AdminDashboard {...props} />} />
             <Route exact path="/student" component={props => <StudentLoginPage   {...props} />} />
             <Route exact path="/vendor" component={props => <VendorPage {...props} />} />
             <Route exact path="/vendor/signup" component={props => <VendorSignupPage {...props} />} />
