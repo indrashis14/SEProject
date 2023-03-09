@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory, Redirect } from 'react-router-dom';
 
-const AdminLoginPage = () => {
+const AdminInvalidLoginPage = () => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory();
@@ -39,6 +39,7 @@ const AdminLoginPage = () => {
     return (
         <div className='login-container'>
             <h1>Admin Login</h1>
+            <h4>Invalid Login!</h4>
             <form className="login-form" onSubmit={handleSubmit}>
                 <label>
                     Username:
@@ -57,4 +58,4 @@ const AdminLoginPage = () => {
     );
 };
 
-export default AdminLoginPage
+export default AdminInvalidLoginPage
