@@ -3,8 +3,13 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require('cors');
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const {check,validationResult }= require('express-validator');
 const uri = 'mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority';
+
+
+
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected!'))
     .catch(err => console.log('Error connecting to MongoDB:', err));
@@ -66,7 +71,14 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-app.post('/student-signup', (req, res) => {
+app.post('/student-signup',[check('userName','Please provide name').not().isEmpty() ,
+                            check('email','Please input valid email id').isEmail(),
+                            check('password','Enter valid password').not().isEmpty(),
+                            check('mobile','Enter valid number').isNumeric()],
+                             (req, res) => {
+    const errors=validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});}
     const { userName, email, password, mobile } = req.body;
 
     const user = new User({
@@ -85,8 +97,14 @@ app.post('/student-signup', (req, res) => {
 
 
 
-app.post('/student-login', (req, res) => {
+app.post('/student-login',[check('userName','Please provide name').not().isEmpty(),
+                            check('password','Please provide password')
+                            ], (req, res) => {
 
+    const errors=validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
     const userName2 = req.body.userName;
     const password2 = req.body.password;
 
@@ -129,7 +147,10 @@ app.post('/student-login', (req, res) => {
 
 });
 
-app.post("/vendor/signup", async (req, res) => {
+app.post("/vendor/signup",[check('userName','Please provide name').not().isEmpty() ,
+                            check('email','Please input valid email id').isEmail(),
+                            check('password','Enter valid password').not().isEmpty(),
+                            check('mobile','Enter valid number').isNumeric()], async (req, res) => {
     const { userName, email, password, mobile } = req.body;
     if (!userName || !email || !password || !mobile) {
         return res.status(400).json({ "result": "invalid data" })
@@ -148,7 +169,9 @@ app.post("/vendor/signup", async (req, res) => {
     vuser.save().then((item) => { console.log(`data saved successfully ${item}`); res.json({ "result": "success" }) }).catch(err => { console.log(err); res.status(400).json({ "result": "bad request" }) })
 })
 //vendor login check
-app.post("/vendor/login", async (req, res) => {
+app.post("/vendor/login",[check('userName','Please provide name').not().isEmpty(),
+check('password','Please provide password')
+], async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
         return res.status(400).json({ "result": "invalid data" });
