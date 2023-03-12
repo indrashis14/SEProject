@@ -24,8 +24,8 @@ function App() {
             <Route exact path="/vendor/signup" component={props => <VendorSignupPage {...props} />} />
             <Route exact path="/vendor/login" component={props => <VendorLoginPage {...props} />} />
             <Route exact path="/vendor/invalid-login" component={props => <VendorInvalidLoginPage {...props} />} />
-            <Route exact path="/student-signup" component={props => <StudentSignupForm {...props} />} />
-            <Route exact path="/student-login" component={props => <StudentLoginForm {...props} />} />
+            <Route exact path="/student/signup" component={props => <StudentSignupForm {...props} />} />
+            <Route exact path="/student/login" component={props => <StudentLoginForm {...props} />} />
         </Router>
     );
 }

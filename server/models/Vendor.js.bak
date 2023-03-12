@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
 // Create Schema
-const UserSchema = new Schema({
+const VendorSchema = new Schema({
   userName: {
     type: String,
     required: true
@@ -19,7 +19,8 @@ const UserSchema = new Schema({
   mobile: String
 });
 
-UserSchema.pre("save", async function (next) {
+
+VendorSchema.pre("save", async function (next) {
   try {
       // Generate salt
       const salt = await bcrypt.genSalt(10)
@@ -33,12 +34,9 @@ UserSchema.pre("save", async function (next) {
   }
 })
 
-UserSchema.methods.comparePassword = async function (inputPassword) {
-  try {
-      return await bcrypt.compare(inputPassword, this.password)
-  } catch (error) {
-      throw new Error(error)
-  }
-}
 
-module.exports = User = mongoose.model('users', UserSchema);
+
+
+
+
+module.exports = Vendor = mongoose.model('vendors', VendorSchema);

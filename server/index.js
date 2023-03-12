@@ -8,6 +8,10 @@ const {check,validationResult }= require('express-validator');
 const jwt=require('jsonwebtoken');
 const config=require('config');
 const auth =require('../server/middleware/auth');
+const passport = require('passport');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 const users = require('./routes/api/users');
@@ -23,34 +27,16 @@ const uri = config.get('dbURL');
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected!'))
     .catch(err => console.log('Error connecting to MongoDB:', err));
+    
+const User = require('../server/models/User');
 
-//make a new user schema for the user signup details
-const userSchema = new mongoose.Schema({
-    userName: String,
-    email: String,
-    password: String,
-    mobile: String
-});
 const vendorSchema = new mongoose.Schema({
     userName: String,
     email: String,
     password: String,
     mobile: String
 })
-// Hash password before saving
-userSchema.pre("save", async function (next) {
-    try {
-        // Generate salt
-        const salt = await bcrypt.genSalt(10)
-        // Hash password
-        const hashedPassword = await bcrypt.hash(this.password, salt)
-        // Replace plain text password with hash
-        this.password = hashedPassword
-        next()
-    } catch (error) {
-        next(error)
-    }
-})
+
 vendorSchema.pre("save", async function (next) {
     try {
         // Generate salt
@@ -66,15 +52,9 @@ vendorSchema.pre("save", async function (next) {
 })
 
 // Compare inputted password with hashed one
-userSchema.methods.comparePassword = async function (inputPassword) {
-    try {
-        return await bcrypt.compare(inputPassword, this.password)
-    } catch (error) {
-        throw new Error(error)
-    }
-}
 
-const User = mongoose.model('User', userSchema);
+
+//const User = mongoose.model('User', UserSchema);
 const Vendor = mongoose.model('Vendor', vendorSchema);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -105,68 +85,6 @@ app.post('/student-signup',[check('userName','Please provide name').not().isEmpt
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
-
-app.post('/student-login',[check('userName','Please provide name').not().isEmpty(),
-                            check('password','Please provide password')
-                            ], (req, res) => {
-
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()});
-    }
-    const userName2 = req.body.userName;
-    const password2 = req.body.password;
-
-    //let user = new User();
-
-    // Find user by email
-    User.findOne({ userName: userName2 }, function (error, user) {
-        // If error, handle it
-        if (error) {
-            console.error(error)
-        }
-        // If user is found
-        if (user) {
-            // Compare passwords using bcrypt
-            bcrypt.compare(password2, user.password, function (error, result) {
-                // If error, handle it
-                if (error) {
-                    console.error(error)
-                }
-                // If result is true, passwords match
-                if (result) {
-                    console.log("Passwords match!")
-                    res.json('User logged in!')
-
-
-                }
-                // If result is false, passwords don't match
-                else {
-                    console.log("Passwords don't match!")
-                    res.status(400).json('Error: password mismatch')
-                }
-            })
-
-            const payload={
-                user:{
-                    id:user.id
-                }
-            }
-
-            jwt.sign(payload,config.get('jwtsecret'),{expiresIn:360000},(err,token)=>{
-                if(err) throw err;
-                res.json({token});
-            })
-        }
-        // If user is not found
-        else {
-            console.log("User not found!")
-        }
-    })
-
-
-});
 
 app.get("/auth",auth,async (req,res)=>res.send('Auth Route'));
 
