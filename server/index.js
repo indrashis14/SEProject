@@ -5,11 +5,21 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require("bcrypt");
 const {check,validationResult }= require('express-validator');
-const uri = 'mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority';
+const jwt=require('jsonwebtoken');
+const config=require('config');
+const auth =require('../server/middleware/auth');
 
 
+const users = require('./routes/api/users');
+app.use(passport.initialize());
 
+// Passport Config
+require('./config/passport')(passport);
 
+// Use Routes
+app.use('/api/users', users);
+
+const uri = config.get('dbURL');
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected!'))
     .catch(err => console.log('Error connecting to MongoDB:', err));
@@ -137,6 +147,17 @@ app.post('/student-login',[check('userName','Please provide name').not().isEmpty
                     res.status(400).json('Error: password mismatch')
                 }
             })
+
+            const payload={
+                user:{
+                    id:user.id
+                }
+            }
+
+            jwt.sign(payload,config.get('jwtsecret'),{expiresIn:360000},(err,token)=>{
+                if(err) throw err;
+                res.json({token});
+            })
         }
         // If user is not found
         else {
@@ -146,6 +167,8 @@ app.post('/student-login',[check('userName','Please provide name').not().isEmpty
 
 
 });
+
+app.get("/auth",auth,async (req,res)=>res.send('Auth Route'));
 
 app.post("/vendor/signup",[check('userName','Please provide name').not().isEmpty() ,
                             check('email','Please input valid email id').isEmail(),

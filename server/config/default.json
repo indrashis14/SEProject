@@ -1,0 +1,5 @@
+{
+    "dbURL" :"mongodb+srv://indrashis14:indrashis2001@cluster.zcs5g1j.mongodb.net/?retryWrites=true&w=majority",
+
+    "jwtsecret":"modyfive"
+}
