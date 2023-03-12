@@ -36,6 +36,15 @@ const vendorSchema = new mongoose.Schema({
     password: String,
     mobile: String
 })
+const vendorItemsSchema = new mongoose.Schema({
+    itemName: String,
+    inStock: Boolean,
+    isAvailable: Boolean,
+    price: Number,
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true }
+})
+// vendorItemsSchema.index({ "itemName": 1, "vendor": 1 }, { "unique": true })
+
 
 vendorSchema.pre("save", async function (next) {
     try {
@@ -56,6 +65,7 @@ vendorSchema.pre("save", async function (next) {
 
 //const User = mongoose.model('User', UserSchema);
 const Vendor = mongoose.model('Vendor', vendorSchema);
+const VendorItems = mongoose.model('VendorItems', vendorItemsSchema);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -80,9 +90,9 @@ app.post('/student-signup',[check('userName','Please provide name').not().isEmpt
     console.log(`Received user data: ${userName}, ${password}, ${email}, ${mobile}`);
     res.json({ message: 'User created successfully' });
 
-  user.save()
-    .then(() => console.log('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+    user.save()
+        .then(() => console.log('User added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 
@@ -125,7 +135,7 @@ check('password','Please provide password')
             }
             if (result) {
                 console.log("Passwords match!")
-                res.json('User logged in!')
+                res.json({ 'isLoggedIn': true, 'id': user._id })
             }
             else {
                 console.log("Passwords don't match!")
@@ -134,7 +144,54 @@ check('password','Please provide password')
         })
     }
 })
-//admin password check
+app.get("/vendor/:vendor_id/", async (req, res) => {
+    try {
+        console.log('here')
+        const vendor_id = req.params.vendor_id
+        const vendor = await Vendor.findOne({ _id: vendor_id })
+        if (vendor) {
+            const response = { ...vendor._doc }
+            const vendorItems = await VendorItems.find({ vendor: vendor })
+            delete response['password'];
+            response['items'] = vendorItems;
+            return res.json(response);
+        }
+        else {
+            throw new Error("Vendor not found")
+        }
+    }
+    catch (err) {
+        console.log("error: ", err)
+        return res.json({ result: err }).status(400)
+    }
+})
+app.post("/vendor/:vendor_id/addItem/", async (req, res) => {
+    try {
+        const vendor_id = req.params.vendor_id
+        const vendor = await Vendor.findOne({ _id: vendor_id })
+        if (vendor) {
+            const { itemName, isAvailable, inStock, price } = req.body
+            if (!itemName || !price) {
+                throw new Error("Insufficient Data!")
+            }
+            const new_item = new VendorItems({
+                itemName,
+                inStock: true,
+                isAvailable: true,
+                price,
+                vendor
+            })
+            const response = await new_item.save()
+            return res.json({ result: "success" })
+        }
+        else {
+            throw new Error("Vendor not found")
+        }
+    }
+    catch (err) {
+        console.log("error: ", err)
+        return res.status(400).json({ result: err })
+    }
 app.post("/admin", async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
