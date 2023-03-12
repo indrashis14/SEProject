@@ -191,7 +191,7 @@ app.post("/vendor/:vendor_id/addItem/", async (req, res) => {
     catch (err) {
         console.log("error: ", err)
         return res.status(400).json({ result: err })
-    }
+    }})
 app.post("/admin", async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
@@ -205,4 +205,5 @@ app.post("/admin", async (req, res) => {
         res.status(401).json({ message: 'Invalid username or password' });
       }
 })
-app.listen(5000, () => { console.log("Server listening on port 5000") })
+
+app.listen(5000, () => { console.log("Server listening on port 5000") });
