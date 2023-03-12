@@ -5,7 +5,7 @@ function LoginPage() {
   const history = useHistory();
 
   function handleStudentClick() {
-    history.push('/student');
+    history.push('/student/login');
   }
 
   function handleAdminClick() {

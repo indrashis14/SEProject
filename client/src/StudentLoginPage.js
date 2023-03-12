@@ -1,20 +1,17 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
 const StudentLoginPage = () => {
-    const history = useHistory();
-
-    function handleLoginClick() {
-        history.push('/student-login')
-    }
-    function handleSignupClick() {
-        history.push('/student-signup')
-    }
+  
+  const history = useHistory();
+  const isAuthenticated = localStorage.getItem('authenticated');
+  console.log(isAuthenticated)
+  if (isAuthenticated === false) {
+      console.log('here');
+      return <Redirect to='/login' />
+  }
   return (
-    <div>
-      <button className='my-button2' onClick={handleLoginClick}> Login as User </button>
-      <button className='my-button2' onClick={handleSignupClick}> Sign up</button>
-    </div>
+      <div>Logged In as Student</div>
   )
 }
 

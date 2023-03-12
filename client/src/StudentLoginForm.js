@@ -16,7 +16,7 @@ import './Login.css';
     const handleSubmit = (event) => {
       event.preventDefault();
   
-      fetch('/student-login', {
+      fetch('/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -51,6 +51,8 @@ import './Login.css';
           <br />
           <button type="submit" onClick={handleSubmit}>Submit</button>
         </form>
+        <br/>
+            <a href='/student/signup'>Sign Up</a>
       </div>
     );
   };

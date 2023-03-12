@@ -9,7 +9,7 @@ const StudentSignupForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('/student-signup', {
+    fetch('/api/users/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -57,6 +57,8 @@ const StudentSignupForm = () => {
         <br />
         <button type="submit" onClick={handleSubmit}>Submit</button>
       </form>
+      <br/>
+            <a href='/student/login'>Log In</a>
     </div>
   );
 };
