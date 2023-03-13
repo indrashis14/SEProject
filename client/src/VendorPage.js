@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom';
 import './vendorpage.css'
-const images = require.context('./images', true);
+
 //import
 
 const VendorPage = () => {
