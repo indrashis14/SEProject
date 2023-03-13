@@ -40,7 +40,7 @@ const User = require('../server/models/User');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './'+'../client/src/images/');
+      cb(null, './'+'../client/public/images/');
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + '.jpg');
@@ -207,9 +207,12 @@ app.post("/vendor/:vendor_id/addItem/",upload.single('imageData'), async (req, r
                 inStock: true,
                 isAvailable: true,
                 price,
-                image: req.file.path,
+                image: req.file.filename,
                 vendor
             })
+            console.log(req.file);
+        const path = req.file.path.split('/').slice(1).join('/');
+        console.log(path);
             const response = await new_item.save()
             return res.json({ result: "success", new_item})
         }
