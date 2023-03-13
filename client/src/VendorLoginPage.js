@@ -35,9 +35,9 @@ const VendorLoginPage = () => {
                     localStorage.removeItem('vendor')
                     localStorage.removeItem('id')
                     localStorage.setItem('authenticated', false)
-                    history.push('/vendor/login')
+                    history.push('/vendor/invalid-login')
                 };
-                history.push('/vendor')
+                // history.push('/vendor')
             })
             .catch(error => { console.error(error); history.push('/vendor/login/') });
 

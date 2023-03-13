@@ -5,6 +5,7 @@ const VendorSignupPage = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
+    const [storeName,setStorename] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -16,6 +17,7 @@ const VendorSignupPage = () => {
             },
             body: JSON.stringify({
                 userName,
+                storeName,
                 email,
                 password,
                 mobile
@@ -39,7 +41,12 @@ const VendorSignupPage = () => {
                     Username:
                     <input type="text" value={userName} onChange={event => setUsername(event.target.value)} />
                 </label>
-                <br />
+                <br/>
+                <label>
+                    Store Name:
+                    <input type="text" value={storeName} onChange={event => setStorename(event.target.value)} />
+                </label>
+                <br/>
                 <label>
                     Email:
                     <input type="email" value={email} onChange={event => setEmail(event.target.value)} />

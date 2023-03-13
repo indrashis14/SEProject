@@ -7,12 +7,20 @@ const bcrypt = require("bcrypt");
 const {check,validationResult }= require('express-validator');
 const jwt=require('jsonwebtoken');
 const config=require('config');
+const path = require('path');
 const auth =require('../server/middleware/auth');
 const passport = require('passport');
+const multer = require('multer');
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
+app.set("view engine","ejs");
+app.use(cors());
+app.use((req, res, next) => {
+    res.setHeader('Strict-Transport-Security', 'max-age=15768000');
+    next();
+  });
 
 const users = require('./routes/api/users');
 app.use(passport.initialize());
@@ -30,17 +38,31 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     
 const User = require('../server/models/User');
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './'+'../client/src/images/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + '.jpg');
+    },
+  });
+  var upload = multer({ storage: storage })
+  
+
 const vendorSchema = new mongoose.Schema({
     userName: String,
+    storeName: String,
     email: String,
     password: String,
     mobile: String
 })
+//vendor item schema
 const vendorItemsSchema = new mongoose.Schema({
     itemName: String,
     inStock: Boolean,
     isAvailable: Boolean,
-    price: Number,
+    price: String,
+    image: String,
     vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true }
 })
 // vendorItemsSchema.index({ "itemName": 1, "vendor": 1 }, { "unique": true })
@@ -68,7 +90,7 @@ const Vendor = mongoose.model('Vendor', vendorSchema);
 const VendorItems = mongoose.model('VendorItems', vendorItemsSchema);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+
 
 
 app.post('/student-signup',[check('userName','Please provide name').not().isEmpty() ,
@@ -99,26 +121,30 @@ app.post('/student-signup',[check('userName','Please provide name').not().isEmpt
 app.get("/auth",auth,async (req,res)=>res.send('Auth Route'));
 
 app.post("/vendor/signup",[check('userName','Please provide name').not().isEmpty() ,
+                            check('storeName','Enter store name').not().isEmpty(),
                             check('email','Please input valid email id').isEmail(),
                             check('password','Enter valid password').not().isEmpty(),
                             check('mobile','Enter valid number').isNumeric()], async (req, res) => {
-    const { userName, email, password, mobile } = req.body;
-    if (!userName || !email || !password || !mobile) {
+    const { userName, storeName, email, password, mobile } = req.body;
+    if (!userName || !storeName || !email || !password || !mobile) {
         return res.status(400).json({ "result": "invalid data" })
     }
-    const oldUser = await Vendor.findOne({ "$or": [{ userName: userName }, { email: email }, { mobile: mobile }] })
+    const oldUser = await Vendor.findOne({ "$or": [{ userName: userName }, { storeName: storeName}, { email: email }, { mobile: mobile }] })
     if (oldUser) {
         // already user exists with this username
         return res.status(400).json({ "result": "user already exists" });
     }
     const vuser = new Vendor({
         userName,
+        storeName,
         email,
         password,
         mobile
     })
     vuser.save().then((item) => { console.log(`data saved successfully ${item}`); res.json({ "result": "success" }) }).catch(err => { console.log(err); res.status(400).json({ "result": "bad request" }) })
 })
+
+
 //vendor login check
 app.post("/vendor/login",[check('userName','Please provide name').not().isEmpty(),
 check('password','Please provide password')
@@ -139,6 +165,7 @@ check('password','Please provide password')
             }
             else {
                 console.log("Passwords don't match!")
+                res.json({ 'isLoggedIn': false, 'id': user._id })
                 res.status(400).json('Error: password mismatch')
             }
         })
@@ -165,13 +192,14 @@ app.get("/vendor/:vendor_id/", async (req, res) => {
         return res.json({ result: err }).status(400)
     }
 })
-app.post("/vendor/:vendor_id/addItem/", async (req, res) => {
+app.post("/vendor/:vendor_id/addItem/",upload.single('imageData'), async (req, res) => {
     try {
         const vendor_id = req.params.vendor_id
         const vendor = await Vendor.findOne({ _id: vendor_id })
         if (vendor) {
-            const { itemName, isAvailable, inStock, price } = req.body
-            if (!itemName || !price) {
+            const { itemName, isAvailable, inStock, price } = req.body;
+            console.log(req.body);
+                        if (!itemName || !price) {
                 throw new Error("Insufficient Data!")
             }
             const new_item = new VendorItems({
@@ -179,10 +207,11 @@ app.post("/vendor/:vendor_id/addItem/", async (req, res) => {
                 inStock: true,
                 isAvailable: true,
                 price,
+                image: req.file.path,
                 vendor
             })
             const response = await new_item.save()
-            return res.json({ result: "success" })
+            return res.json({ result: "success", new_item})
         }
         else {
             throw new Error("Vendor not found")

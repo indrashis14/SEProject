@@ -1,0 +1,26 @@
+.image-preview {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+#image-input {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    padding: 2px;
+}
+#price-input {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    padding: 2px;
+}
+#name-input {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+    padding: 2px;
+}

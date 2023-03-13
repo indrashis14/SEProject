@@ -32,7 +32,6 @@ const VendorPage = () => {
     function showMenu() {
         setSelectedNavItem('menu');
     }
-
     function showOrderRequests() {
         setSelectedNavItem('orderRequests');
     }
@@ -66,6 +65,9 @@ const VendorPage = () => {
                                 <div className="menuitem" key={item._id}>
                                     <span className="itemname">{item.itemName}</span>
                                     <span className="itemprice">Rs.{item.price}</span>
+                                    {`${item.image}`}
+                                    <span><img src={item.image} alt="noimage" className="itemimage" /></span>
+                                    <image source={{ uri: `..\..\server\${item.image}` }} />
                                     <label class="toggle-btn">
                                         <input onChange={event => changeItemStatus(event, item._id)} type="checkbox" />
                                         <span class="slider round"></span>

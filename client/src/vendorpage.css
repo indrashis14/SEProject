@@ -42,7 +42,7 @@
 
 .menuitem {
     padding: 10px;
-    width: 200px;
+    width: 500px;
     display: flex;
     justify-content: space-between;
 }
@@ -111,5 +111,5 @@
 }
 
 .itemprice {
-    margin-right: 50px;
+    margin-right: 10px;
 }
