@@ -146,9 +146,7 @@ app.post("/vendor/signup",[check('userName','Please provide name').not().isEmpty
 
 
 //vendor login check
-app.post("/vendor/login",[check('userName','Please provide name').not().isEmpty(),
-check('password','Please provide password')
-], async (req, res) => {
+app.post("/vendor/login",async (req, res) => {
     const { userName, password } = req.body;
     if (!userName || !password) {
         return res.status(400).json({ "result": "invalid data" });
@@ -192,6 +190,19 @@ app.get("/vendor/:vendor_id/", async (req, res) => {
         return res.json({ result: err }).status(400)
     }
 })
+
+
+
+  app.get("/vendors/names", async (req, res) => {
+    try {
+      const vendors = await Vendor.find().select("storeName");
+      const vnames = vendors.map(vendor => vendor.storeName);
+      res.json(vnames);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  });
+
 app.post("/vendor/:vendor_id/addItem/",upload.single('imageData'), async (req, res) => {
     try {
         const vendor_id = req.params.vendor_id

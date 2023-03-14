@@ -45,97 +45,37 @@ user.save()
 .catch(err => res.status(400).write('Error: ' + err));
 });
 
-  
-  
 
-//   User.findOne({ email: req.body.email }).then(user => {
-//     if (user) {
-      
-//       return res.status(400).json('Email already exists');
-//     } else {
-//       const newUser = new User({
-//         userName: req.body.name,
-//         email: req.body.email,
-//         password: req.body.password,
-//         mobile:req.body.mobile
-//       });
-
-//       bcrypt.genSalt(10, (err, salt) => {
-//         bcrypt.hash(newUser.password, salt, (err, hash) => {
-//           if (err) throw err;
-//           newUser.password = hash;
-//           newUser
-//             .save()
-//             .then(user => res.json(user))
-//             .catch(err => console.log(err));
-//         });
-//       });
-//     }
-//   });
-// });
 
 // @route   GET api/users/login
-// @desc    Login User / Returning JWT Token
+// @desc    Login User 
 // @access  Public
-router.post('/login',[check('userName','Please provide name').not().isEmpty(),
-  check('password','Please provide password')
-  ], (req, res) => {
+router.post('/login', async(req, res) => {
 
-const errors=validationResult(req);
-if(!errors.isEmpty()){
-return res.status(400).json({errors:errors.array()});
+  const { userName, password } = req.body;
+  if (!userName || !password) {
+    return res.status(400).json({ "result": "invalid data" });
 }
-const userName2 = req.body.userName;
-const password2 = req.body.password;
-
-//let user = new User();
-
-// Find user by email
-User.findOne({ userName: userName2 }, function (error, user) {
-// If error, handle it
-if (error) {
-console.error(error)
-}
-// If user is found
+const user = await User.findOne({ userName: userName })
 if (user) {
-  //console.log('user found via api');
-// Compare passwords using bcrypt
-bcrypt.compare(password2, user.password, function (error, result) {
-// If error, handle it
-if (error) {
-console.error(error)
-}
-// If result is true, passwords match
-if (result) {
-console.log("Passwords match!");
-//res.json('User logged in!');
-const payload={
-user:{
-  id:user.id
-}
+    bcrypt.compare(password, user.password, function (error, result) {
+        if (error) {
+            console.error(error)
+        }
+        if (result) {
+            console.log("Passwords match!")
+            res.json({ 'isLoggedIn': true, 'id': user._id })
+        }
+        else {
+            console.log("Passwords don't match!")
+            res.json({ 'isLoggedIn': false, 'id': user._id })
+            res.status(400).json('Error: password mismatch')
+        }
+    })
 }
 
-jwt.sign(payload,config.get('jwtsecret'),{expiresIn:360000},(err,token)=>{
-if(err) throw err;
-res.json({token});
-})
 
-
-}
-// If result is false, passwords don't match
-else {
-console.log("Passwords don't match!");
-return res.status(400).write('Error: password mismatch');
-}
-})
-
-
-}
-// If user is not found
-else {
-console.log("User not found!")
-}
-})
+  
 
 
 });

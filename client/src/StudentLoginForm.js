@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
+import { useHistory, Redirect } from 'react-router-dom';
 import './Login.css';
-// const StudentSignupForm = () => {
-//   const [userName, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [mobile, setMobile] = useState('');
-// }
 
-  const StudentLoginForm = () => {
+const StudentLoginForm = () => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const history = useHistory();
     // const [email, setEmail] = useState('');
     // const [mobile, setMobile] = useState('');
   
@@ -27,8 +23,24 @@ import './Login.css';
         })
       })
       .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+      .then(data => {
+                console.log(data)
+                console.log('result: ', data['result'])
+                if (data['isLoggedIn']) {
+                    localStorage.setItem('student_id', data['id'])
+                    localStorage.setItem('student', userName)
+                    localStorage.setItem('authenticated', true)
+                    history.push('/student');
+                }
+                else {
+                    localStorage.removeItem('student')
+                    localStorage.removeItem('student_id')
+                    localStorage.setItem('authenticated', false)
+                    history.push('/student/invalid-login')
+                };
+                
+            })
+      .catch(error => { console.error(error); history.push('/student/login/') });
   
      setUsername('');
      setPassword('');

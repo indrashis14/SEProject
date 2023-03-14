@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory, Redirect } from 'react-router-dom';
 
-const VendorLoginPage = () => {
+const StudentInvalidLoginPage = () => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory();
@@ -11,7 +11,7 @@ const VendorLoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch('http://localhost:5000/vendor/login', {
+        fetch('/api/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,20 +26,19 @@ const VendorLoginPage = () => {
                 console.log(data)
                 console.log('result: ', data['result'])
                 if (data['isLoggedIn']) {
-                    localStorage.setItem('vendor_id', data['id'])
-                    localStorage.setItem('vendor', userName)
+                    localStorage.setItem('student_id', data['id'])
+                    localStorage.setItem('student', userName)
                     localStorage.setItem('authenticated', true)
-                    history.push('/vendor');
+                    history.push('/student');
                 }
                 else {
-                    localStorage.removeItem('vendor')
-                    localStorage.removeItem('vendor_id')
+                    localStorage.removeItem('student')
+                    localStorage.removeItem('id')
                     localStorage.setItem('authenticated', false)
-                    history.push('/vendor/invalid-login')
+                    history.push('/student/invalid-login')
                 };
-                // history.push('/vendor')
             })
-            .catch(error => { console.error(error); history.push('/vendor/login/') });
+            .catch(error => console.error(error));
 
         setUsername('');
         setPassword('');
@@ -48,7 +47,8 @@ const VendorLoginPage = () => {
 
     return (
         <div className='login-container'>
-            <h1>Login Vendor</h1>
+            <h1>Login Student</h1>
+            <h4>Invalid Login!</h4>
             <form className="login-form" onSubmit={handleSubmit}>
                 <label>
                     Username:
@@ -62,11 +62,11 @@ const VendorLoginPage = () => {
                 <br />
                 <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
-            <br />
-            <a href='/vendor/signup'>SignUP</a>
+            <br/>
+            <a href='/student/signup'>SignUP</a>
         </div>
 
     );
 };
 
-export default VendorLoginPage
+export default StudentInvalidLoginPage
