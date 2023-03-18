@@ -52,6 +52,7 @@ const [vendors, setVendors] = useState([]);
           <li key={vendor}>{vendor}</li>
         ))}
       </ul>
+      <a className="button" href="/student/cart">View Cart</a>
     </div>
   );
  

@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
-//const gravatar = require('gravatar');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const keys = require('../../config/keys');
 const passport = require('passport');
 const {check,validationResult }= require('express-validator');
 const config=require('config');
+const mongoose=require('mongoose');
+//const ObjectId=require('mongodb').ObjectID;
 
 
 
 // Load User model
 const User = require('../../models/User');
+const Cart = require("../../models/Cart");
+
+
+
+const VendorItems = require('../../models/VendorItem');
 
 // @route   GET api/users/test2
 // @desc    Tests users route
@@ -79,6 +85,167 @@ if (user) {
 
 
 });
+
+router.get("/cart/get/:student_id/", async (req, res) => {
+  // const userId = req.params.userId;
+
+  // try {
+  //   // Find the cart of the user with the given ID
+  //   const cart = await Cart.findOne({ userId})
+  //   //.populate('products.productId');
+  //   if (cart) {
+  //         //cart exists for user
+  //         return res.status(200).send(cart.products); // send back the cart
+  //       } 
+
+  //   else if (!cart) {
+  //     // If no cart is found for the user, return a 404 status code
+  //     return res.status(404).json({ message: 'Cart not found' });
+  //   }
+
+  //   // If the cart is found, return the list of products
+  //  // res.json(cart.products);
+  // } catch (err) {
+  //   // If an error occurs, return a 500 status code and the error message
+  //   res.status(500).json({ message: err.message });
+  // }
+  const userId = req.params.student_id; 
+
+  try {
+    let cart = await Cart.findOne({ userId }).populate('products.productId'); // find the cart for the user
+
+    if (cart) {
+      //cart exists for user
+      return res.status(200).send(cart.products); // send back the cart
+    } else {
+      //no cart for user, send error message
+      return res.status(404).send("Cart not found");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Something went wrong"); // handle errors
+  }
+});
+
+router.post("/cart/add/:student_id/", async (req, res) => {
+  try {
+    const { productId, quantity } = req.body;
+    const userId = req.params.student_id;
+
+    // Check if the cart already exists for the user
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      // If the cart doesn't exist, create a new one
+      cart = new Cart({
+        userId,
+        products: [],
+      });
+    }
+
+    // Check if the product already exists in the cart
+    const existingProductIndex = cart.products.findIndex(
+      (product) => product._id.toString() === productId
+    );
+
+    if (existingProductIndex !== -1) {
+      // If the product already exists, update its quantity
+      cart.products[existingProductIndex].quantity += parseInt(quantity);
+    } else {
+      // If the product doesn't exist, add it to the cart
+      const product = await VendorItems.findById(productId);
+      cart.products.push({
+        _id: product._id,
+        itemName: product.itemName,
+        price: product.price,
+        quantity,
+      });
+    }
+
+    await cart.save();
+
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+// router.post("/cart/add/:student_id/", async (req, res) => {
+//   const { product_id, quantity, name, price } = req.body; // get the product details from the request body
+//   //const userId = req.user._id; // get the user id from the request object (assuming you have some authentication middleware)
+//   const userId = req.params.student_id;
+//   console.log(product_id);
+
+  
+//   try {
+//     let cart = await Cart.findOne({ userId }); // find the cart for the user
+
+//     if (cart) {
+//       //cart exists for user
+//       let productId=mongoose.types.ObjectId(product_id);
+//       let itemIndex = cart.products.findIndex((p) => p.productId == productId); // find the index of the product in the cart
+
+//       if (itemIndex > -1) {
+//         //product exists in the cart, update the quantity
+//         let productItem = cart.products[itemIndex];
+//         productItem.quantity = quantity;
+//         cart.products[itemIndex] = productItem;
+//       } else {
+//         //product does not exists in cart, add new item
+//         cart.products.push({ productId, quantity, name, price });
+//       }
+//       cart = await cart.save(); // save the updated cart
+//       return res.status(201).send(cart); // send back the updated cart
+//     } else {
+      
+//       //no cart for user, create new cart
+//       let productId=mongoose.types.ObjectId(product_id);
+//       const newCart = await Cart.create({
+//         userId,
+//         products: [{ productId, quantity, name, price }],
+//       }); // create a new cart with the product
+
+//       return res.status(201).send(newCart); // send back the new cart
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send("Something went wrong"); // handle errors
+//   }
+// });
+
+
+
+router.delete("/cart/:student_id/:productId", async (req, res) => {
+  const productId = req.params.productId; // get the product id from the request params
+  const userId = req.user._id; // get the user id from the request object (assuming you have some authentication middleware)
+
+  try {
+    let cart = await Cart.findOne({ userId }); // find the cart for the user
+
+    if (cart) {
+      //cart exists for user
+      let itemIndex = cart.products.findIndex((p) => p.productId == productId); // find the index of the product in the cart
+
+      if (itemIndex > -1) {
+        //product exists in the cart, remove it
+        cart.products.splice(itemIndex, 1); // use splice to remove one element at itemIndex
+        cart = await cart.save(); // save the updated cart
+        return res.status(200).send(cart); // send back the updated cart
+      } else {
+        //product does not exist in cart, send error message
+        return res.status(404).send("Product not found in cart");
+      }
+    } else {
+      //no cart for user, send error message
+      return res.status(404).send("Cart not found");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Something went wrong"); // handle errors
+  }
+});
+
+
   
 
 //   const userName2 = req.body.userName;
