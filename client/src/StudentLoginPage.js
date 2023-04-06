@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory, Link } from 'react-router-dom';
 //import { get } from "../../server/routes/api/users";
+import './student.css'
 
 const StudentLoginPage = () => {
   
@@ -27,17 +28,17 @@ const [vendors, setVendors] = useState([]);
   
   // Render the list of vendors
   return (
-    <div>
-      <h1 align="center">Welcome {userName}</h1>
-      <br/><br/>
-      <h2 align="center">List of Vendors</h2>
-      {vendors.map(vendor => (
-        <p key={vendor._id}>
-          <Link to={`/student/${vendor._id}/items`}>{vendor.storeName}</Link>
-        </p>
-      ))}
-      
-    </div>
+    <div className="welcome-container">
+  <h1 className="welcome-title">Welcome {userName}</h1>
+  <br/><br/>
+  <h2 className="vendor-list-title">List of Vendors</h2>
+  {vendors.map(vendor => (
+    <p key={vendor._id}>
+      <Link className="vendor-link" to={`/student/${vendor._id}/items`}>{vendor.storeName}</Link>
+    </p>
+  ))}
+  <a className="button" href="/student/cart">View Cart</a>
+</div>
   );
  
 

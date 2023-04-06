@@ -86,7 +86,8 @@
     cursor: pointer;
   }
   body {
-    background-image: url('https://i.pinimg.com/originals/40/e6/ce/40e6ce55cf2491002ddbee462e28fb53.png'); 
+    /* background-image: url('https://i.pinimg.com/originals/40/e6/ce/40e6ce55cf2491002ddbee462e28fb53.png');  */
+    background-image: url('https://images.pexels.com/photos/305821/pexels-photo-305821.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); 
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat;
