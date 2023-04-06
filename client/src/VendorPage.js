@@ -12,7 +12,7 @@ const VendorPage = () => {
 
     console.log(isAuthenticated)
 
-    if (isAuthenticated == false) {
+    if (isAuthenticated === false) {
         console.log('here');
         history.push("/vendor/login")
     }

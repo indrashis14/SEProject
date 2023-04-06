@@ -32,7 +32,7 @@ function VendorAddItemPage() {
       const data = await response.json();
       console.log(data);
       
-      history.push('/vendor/');
+      history.push('/vendor');
     } catch (error) {
       console.error(error);
     }

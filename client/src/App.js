@@ -14,6 +14,7 @@ import AdminInvalidLoginPage from './AdminInvalidLoginPage';
 import AdminDashboard from './AdminDashboard'
 import StudentCart from './StudentCart'
 import StudentInvalidLoginPage from   './StudentInvalidLoginPage'
+import Items from './Items'
 
 function App() {
     return (
@@ -32,7 +33,8 @@ function App() {
             <Route exact path="/student/login" component={props => <StudentLoginForm {...props} />} />
             <Route exact path="/student/cart" component={props => <StudentCart {...props} />} />
             <Route exact path="/student/invalid-login" component={props => <StudentInvalidLoginPage {...props} />} />
-
+            <Route exact path="/student/:vendorid/items" component={props => <Items {...props} />} />
+            
 
         </Router>
     );

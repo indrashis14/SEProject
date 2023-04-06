@@ -191,15 +191,20 @@ app.get("/vendor/:vendor_id/", async (req, res) => {
     }
 })
 
+app.get('/student/:vendorid/items', async (req, res) => {
+    const items = await VendorItems.find({ vendor: req.params.vendorid }).populate(
+      'vendor'
+    );
+    res.json(items);
+  });
 
-
-  app.get("/vendors/names", async (req, res) => {
+app.get('/vendors/names', async (req, res) => {
     try {
-      const vendors = await Vendor.find().select("storeName");
-      const vnames = vendors.map(vendor => vendor.storeName);
-      res.json(vnames);
+      const vendors = await Vendor.find({}, 'storeName').exec(); // retrieve all vendors and select only the storeName field
+      res.json(vendors); // respond with a JSON array of all vendors
     } catch (error) {
-      res.status(500).send(error.message);
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
   });
 
