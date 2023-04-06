@@ -68,7 +68,7 @@ const VendorPage = () => {
                                     <span className="itemname">{item.itemName}</span>
                                     <span className="itemprice">Rs.{item.price}</span>
                                     {/* {`${item.image}`} */}
-                                    <span><img src={`./images/${item.image}`} alt="noimage" width="350" height="200" className="itemimage" /></span>
+                                    <span><img src={`/images/${item.image}`} alt="noimage" width="350" height="200" className="itemimage" /></span>
                                     {/* <image source={{images(`./${item.image}`).default}} /> */}
                                     <label class="toggle-btn">
                                         <input onChange={event => changeItemStatus(event, item._id)} type="checkbox" />
