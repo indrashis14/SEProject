@@ -7,7 +7,6 @@ const passport = require('passport');
 const {check,validationResult }= require('express-validator');
 const config=require('config');
 const mongoose=require('mongoose');
-//const ObjectId=require('mongodb').ObjectID;
 
 
 
@@ -87,36 +86,14 @@ if (user) {
 });
 
 router.get("/cart/get/:student_id/", async (req, res) => {
-  // const userId = req.params.userId;
-
-  // try {
-  //   // Find the cart of the user with the given ID
-  //   const cart = await Cart.findOne({ userId})
-  //   //.populate('products.productId');
-  //   if (cart) {
-  //         //cart exists for user
-  //         return res.status(200).send(cart.products); // send back the cart
-  //       } 
-
-  //   else if (!cart) {
-  //     // If no cart is found for the user, return a 404 status code
-  //     return res.status(404).json({ message: 'Cart not found' });
-  //   }
-
-  //   // If the cart is found, return the list of products
-  //  // res.json(cart.products);
-  // } catch (err) {
-  //   // If an error occurs, return a 500 status code and the error message
-  //   res.status(500).json({ message: err.message });
-  // }
-  const userId = req.params.student_id; 
+    const userId = req.params.student_id; 
 
   try {
     let cart = await Cart.findOne({ userId }).populate('products.productId'); // find the cart for the user
 
     if (cart) {
       //cart exists for user
-      return res.status(200).send(cart.products); // send back the cart
+      return res.status(200).send({cartId: cart._id, products: cart.products}); // send back the cart
     } else {
       //no cart for user, send error message
       return res.status(404).send("Cart not found");
@@ -170,6 +147,101 @@ router.post("/cart/add/:student_id/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+router.delete("/cart/clear/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const updatedCart = await Cart.findOneAndUpdate(
+      { userId: userId },
+      { products: [] },
+      { new: true }
+    );
+
+    if (!updatedCart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    res.status(200).json({ message: "Cart cleared successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+router.put("/cart/increment/:cartId/:productId", (req, res) => {
+  const cartId = req.params.cartId;
+  const productId = req.params.productId;
+  Cart.findById(cartId, async (err, cart) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: "Internal server error" });
+    } else {
+      console.log(productId);
+      const product = await cart.products.find((p) => p._id.toString() == productId);
+      if (product) {
+        product.quantity++;
+        cart.save((err, updatedCart) => {
+          if (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal server error" });
+          } else {
+            res.json(updatedCart.products);
+          }
+        });
+      } else {
+        res.status(404).json({ error: "Product not found in cart" });
+      }
+    }
+  });
+});
+
+
+router.put("/cart/decrement/:cartId/:productId/", async (req, res) => {
+  try {
+    const { cartId, productId } = req.params;
+    const cart = await Cart.findById(cartId);
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const product = cart.products.find(
+      (product) => product._id.toString() === productId
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found in cart" });
+    }
+
+    let quantity = product.quantity;
+    if (quantity > 1) {
+      quantity -= 1;
+      product.quantity = quantity;
+      cart.modifiedOn = new Date();
+
+      const updatedCart = await cart.save();
+      return res.json(updatedCart.products);
+    } else {
+      cart.products = cart.products.filter(
+        (product) => product._id.toString() !== productId
+      );
+      cart.modifiedOn = new Date();
+
+      const updatedCart = await cart.save();
+      return res.json(updatedCart.products);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+
+
+
+
 // router.post("/cart/add/:student_id/", async (req, res) => {
 //   const { product_id, quantity, name, price } = req.body; // get the product details from the request body
 //   //const userId = req.user._id; // get the user id from the request object (assuming you have some authentication middleware)
