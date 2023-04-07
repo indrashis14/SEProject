@@ -89,11 +89,11 @@ router.get("/cart/get/:student_id/", async (req, res) => {
     const userId = req.params.student_id; 
 
   try {
-    let cart = await Cart.findOne({ userId }).populate('products.productId'); // find the cart for the user
+    let cart = await Cart.findOne({ userId }).populate('products.productId').populate('vendorId'); // find the cart for the user
 
     if (cart) {
       //cart exists for user
-      return res.status(200).send({cartId: cart._id, products: cart.products}); // send back the cart
+      return res.status(200).send({cartId: cart._id, products: cart.products, vendorName: cart.vendorId.storeName}); // send back the cart
     } else {
       //no cart for user, send error message
       return res.status(404).send("Cart not found");
@@ -109,6 +109,8 @@ router.post("/cart/add/:student_id/", async (req, res) => {
     const { productId, quantity } = req.body;
     const userId = req.params.student_id;
 
+    const product = await VendorItems.findById(productId);
+    const vendorId = product.vendor;
     // Check if the cart already exists for the user
     let cart = await Cart.findOne({ userId });
 
@@ -116,8 +118,15 @@ router.post("/cart/add/:student_id/", async (req, res) => {
       // If the cart doesn't exist, create a new one
       cart = new Cart({
         userId,
+        vendorId,
         products: [],
-      });
+      });}
+      // console.log("cart wala  " ,cart.vendorId.toString());
+    //   console.log(vendorId.toString())
+     else if (cart.vendorId.toString() != vendorId.toString()) {
+      // If the cart exists but has items from a different vendor, clear the cart
+      cart.products = [];
+      cart.vendorId = vendorId;
     }
 
     // Check if the product already exists in the cart

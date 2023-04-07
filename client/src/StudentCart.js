@@ -12,6 +12,7 @@ const StudentCart = () => {
       setProducts(data.products);
       setCartId(data.cartId);
       localStorage.setItem('cart_id', data.cartId);
+      localStorage.setItem('vendorName',data.vendorName);
     })
     .catch(error => console.error(error));
 }, []);
@@ -46,8 +47,9 @@ const StudentCart = () => {
 
   return (
     
-    <div class="cart-container">
-    <h1>Cart of User {localStorage.getItem('student')}</h1>
+    <div className="cart-container">
+    <h1>Cart of User {localStorage.getItem('student')}  </h1>
+    <h2> Vendor Name: {localStorage.getItem('vendorName')}</h2>
     <table>
       <thead>
         <tr>
@@ -74,7 +76,7 @@ const StudentCart = () => {
         ))}
       </tbody>
     </table>
-    <div class="cart-total">
+    <div className="cart-total">
     Total: {products.reduce((sum, product) => sum + (product.price * product.quantity), 0)}
   </div>
     <button onClick={handleClearCart}>Clear Cart</button>
