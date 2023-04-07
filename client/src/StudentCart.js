@@ -1,4 +1,5 @@
  import React, { useState, useEffect } from 'react';
+ import './StudentCart.css'
 
 // A component to render the cart view
 const StudentCart = () => {
@@ -44,21 +45,40 @@ const StudentCart = () => {
   };
 
   return (
-    <div>
-      <h1>Cart of User {localStorage.getItem('student')} </h1>
-      <ul>
+    
+    <div class="cart-container">
+    <h1>Cart of User {localStorage.getItem('student')}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
         {products.map(product => (
-          <li key={product._id}>
-            {product.itemName}  Price: {product.price}  Quantity: {product.quantity}    
-            
-            <button onClick={() => handleIncrement(localStorage.getItem('cart_id').toString(), product._id)}>+ </button>
-                     
-            <button onClick={() => handleDecrement(localStorage.getItem('cart_id').toString(), product._id)}> -</button>
-          </li>
+          <tr key={product._id}>
+            <td>{product.itemName}</td>
+            <td>{product.price}</td>
+            <td>{product.quantity}</td>
+            <td>
+              <button onClick={() => handleIncrement(localStorage.getItem('cart_id').toString(), product._id)}>+ </button>
+            </td>
+            <td>
+              <button onClick={() => handleDecrement(localStorage.getItem('cart_id').toString(), product._id)}> -</button>
+            </td>
+          </tr>
         ))}
-      </ul>
-      <button onClick={handleClearCart}>Clear Cart</button>
-    </div>
+      </tbody>
+    </table>
+    <div class="cart-total">
+    Total: {products.reduce((sum, product) => sum + (product.price * product.quantity), 0)}
+  </div>
+    <button onClick={handleClearCart}>Clear Cart</button>
+  </div>
   );
 }
 

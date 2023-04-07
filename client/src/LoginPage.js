@@ -17,10 +17,14 @@ function LoginPage() {
   }
 
   return (
-    <div>
-      <button className="my-button" onClick={handleStudentClick}> Student </button>
-      <button className="my-button" onClick={handleAdminClick}> Admin </button>
-      <button className="my-button" onClick={handleVendorClick}> Vendor </button>
+    <div className="login-page">
+      <h1>Welcome to Our Online Store!</h1>
+      <p>Please select your account type to sign in:</p>
+      <div className="login-buttons">
+        <button className="my-button" onClick={handleStudentClick}> Student </button>
+        <button className="my-button" onClick={handleAdminClick}> Admin </button>
+        <button className="my-button" onClick={handleVendorClick}> Vendor </button>
+      </div>
     </div>
   );
 }
