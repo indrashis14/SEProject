@@ -363,6 +363,62 @@ router.get('/orders/new/:vendorId', async (req, res) => {
   }
 });
 
+router.get('/orders/accepted/:vendorId', async (req, res) => {
+  try {
+    const aorders = await Order.find({ vendorId: req.params.vendorId, status: 'accepted' }).populate('userId').populate('products.productId');
+    res.json(aorders);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send(err);
+  }
+});
+
+router.put('/accept-order/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    console.log(orderId);
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ msg: 'Order not found' });
+    }
+    order.status = 'accepted';
+    order.modifiedOn = new Date();
+    await order.save();
+    res.json({ msg: `Order ${order._id} has been accepted` });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+router.get('/orders/fulfilled/:vendorId', async (req, res) => {
+  try {
+    const aorders = await Order.find({ vendorId: req.params.vendorId, status: 'fulfilled' }).populate('userId').populate('products.productId');
+    res.json(aorders);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send(err);
+  }
+});
+
+router.put('/fulfill-order/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    console.log(orderId);
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ msg: 'Order not found' });
+    }
+    order.status = 'fulfilled';
+    order.modifiedOn = new Date();
+    await order.save();
+    res.json({ msg: `Order ${order._id} has been accepted` });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 
 
 
