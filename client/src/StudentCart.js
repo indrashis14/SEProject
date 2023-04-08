@@ -48,6 +48,26 @@ const StudentCart = () => {
       .catch(error => console.error(error));
   };
 
+  const handleCheckout = () => {
+    fetch(`/api/users/orders/create/${localStorage.getItem('student_id')}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        products: products
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        toast.success('Order created successfully!', { autoClose: 2000 });
+        setProducts([]);
+      })
+      .catch(error => {console.error(error);
+        toast('Order failed!', { autoClose: 2000 });
+      });
+  }
+
   return (
     
     <div className="cart-container">
@@ -83,7 +103,12 @@ const StudentCart = () => {
     <div className="cart-total">
     Total: {products.reduce((sum, product) => sum + (product.price * product.quantity), 0)}
   </div>
+  <div style={{marginTop: '10px'}}>
     <button onClick={handleClearCart}>Clear Cart</button>
+    </div>
+    <div style={{marginTop: '10px'}}>
+    <button onClick={handleCheckout}>Checkout</button>
+    </div>
   </div>
   );
 }

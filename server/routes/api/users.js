@@ -13,6 +13,8 @@ const mongoose=require('mongoose');
 // Load User model
 const User = require('../../models/User');
 const Cart = require("../../models/Cart");
+const Order = require('../../models/Order');
+mongoose.model('User', User.schema);
 
 
 
@@ -326,59 +328,46 @@ router.delete("/cart/:student_id/:productId", async (req, res) => {
   }
 });
 
-
-  
-
-//   const userName2 = req.body.userName;
-//   const password2 = req.body.password;
-
-//   // Find user by userName
-//   User.findOne({ userName2 }).then(user => {
-//     // Check for user
-//     if (!user) {
-      
-//       return res.status(404).json('User not found');
-//     }
-
-//     // Check Password
-//     bcrypt.compare(password2, user.password).then(isMatch => {
-//       if (isMatch) {
-//         // User Matched
-//         const payload = { id: user.id, name: user.userName }; // Create JWT Payload
-
-//         // Sign Token
-//         jwt.sign(
-//           payload,
-//           keys.secretOrKey,
-//           { expiresIn: 3600 },
-//           (err, token) => {
-//             res.json({
-//               success: true,
-//               token: 'Bearer ' + token
-//             });
-//           }
-//         );
-//       } else {
-       
-//         return res.status(400).json('Password incorrect');
-//       }
-//     }).catch(err => res.status(400).json('Error: ' + err));
-//   });
-// });
-
-// @route   GET api/users/current
-// @desc    Return current user
-// @access  Private
-router.get(
-  '/current',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    res.json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email
+router.put("/orders/create/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const cart = await Cart.findOne({userId}).populate("products.productId");
+    const order = new Order({
+      userId: cart.userId,
+      vendorId: cart.vendorId,
+      products: cart.products.map(product => ({
+        itemId: product._id,
+        itemName: product.itemName,
+        price: product.price,
+        quantity: product.quantity
+      })),
+      status: "new"
     });
+    await order.save();
+    await Cart.updateOne({_id: cart._id}, {$set: {products: []}}); // Clear cart
+    res.status(200).json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Unable to create order." });
   }
-);
+});
+
+
+router.get('/orders/new/:vendorId', async (req, res) => {
+  try {
+    const orders = await Order.find({ vendorId: req.params.vendorId, status: 'new' }).populate('userId').populate('products.productId');
+    res.json(orders);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send(err);
+  }
+});
+
+
+
+
+
+
+
 
 module.exports = router;

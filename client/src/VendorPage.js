@@ -9,6 +9,7 @@ const VendorPage = () => {
     const [selectedNavItem, setSelectedNavItem] = useState('menu');
     const history = useHistory();
     const isAuthenticated = localStorage.getItem('authenticated');
+    const [orders, setOrders] = useState([]);
 
     console.log(isAuthenticated)
 
@@ -17,19 +18,29 @@ const VendorPage = () => {
         history.push("/vendor/login")
     }
 
-    useEffect(() => {
-        const vendor_id = localStorage.getItem('vendor_id');
-        fetch(`http://localhost:5000/vendor/${vendor_id}/`)
-            .then(response => response.json())
-            .then(data => {
-                console.log("vendor data:", data)
-                setVendorData(data);
-            })
-            .catch(err => {
-                console.log("error while fetching vendor data:", err)
-            });
+      useEffect(() => {
+    const vendor_id = localStorage.getItem('vendor_id');
 
-    }, []);
+    fetch(`http://localhost:5000/vendor/${vendor_id}/`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("vendor data:", data)
+        setVendorData(data);
+      })
+      .catch(err => {
+        console.log("error while fetching vendor data:", err)
+      });
+
+    fetch(`api/users/orders/new/${vendor_id}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("order data:", data)
+        setOrders(data);
+      })
+      .catch(err => {
+        console.log("error while fetching order data:", err)
+      });
+  }, []);
 
     function showMenu() {
         setSelectedNavItem('menu');
@@ -79,9 +90,28 @@ const VendorPage = () => {
                         </div>
                     )}
                     {selectedNavItem === 'orderRequests' && (
-                        <div>
-                            Show Order Requests here
-                        </div>
+                       <div>
+                       <h2>Order Requests</h2>
+                       {orders && orders.length > 0 ? (
+                        orders.map(order => (
+                            <div key={order._id} className="order-container">
+                            <p><b>Order ID: </b>{order._id}</p>
+                            {/* <p><b>Status: </b>{order.status}</p> */}
+                            <p><b>Created On: </b>{new Date(order.createdOn).toLocaleString()}</p>
+                            <p><b>Username: </b>{order.userId.userName}</p>
+                            {order.products.map(product => (
+                                <div key={product.productId}>
+                                <p><b>Item Name: </b>{product.itemName}</p>
+                                </div>
+                            ))}
+                            <button>Accept Order</button>
+                            </div>
+                        ))
+                        ) : (
+                        <p>No order requests found.</p>
+                        )}
+
+                     </div>
                     )}
                     {selectedNavItem === 'currentOrders' && (
                         <div>
