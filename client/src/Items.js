@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Items.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Items() {
   const { vendorid } = useParams();
@@ -36,9 +39,13 @@ function addToCart(productId) {
       quantity: 1 // You can change this to whatever quantity you want to add to the cart
     })
   })
+  .then( toast.success('Item added to cart successfully!', {
+    autoClose: 1000,
+  }))
   .then(response => response.json())
   .then(data => {
     console.log(data); // You can handle the response here
+    
   })
   .catch(error => {
     console.error(error);
@@ -46,6 +53,7 @@ function addToCart(productId) {
 }
   return (
     <div className="menu">
+      <ToastContainer />
       <h2 align="center">Items for Vendor</h2>
       {items.map(item => (
   <div className="menuitem" key={item._id}>

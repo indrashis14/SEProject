@@ -1,4 +1,5 @@
  import React, { useState, useEffect } from 'react';
+ import { ToastContainer, toast } from 'react-toastify';
  import './StudentCart.css'
 
 // A component to render the cart view
@@ -32,6 +33,7 @@ const StudentCart = () => {
       method: 'PUT'
     })
       .then(response => response.json())
+      .then( toast.success('Quantity updated', {autoClose: 1000, limit: 1}))
       .then(data => setProducts(data))
       .catch(error => console.error(error));
   };
@@ -41,6 +43,7 @@ const StudentCart = () => {
       method: 'PUT'
     })
       .then(response => response.json())
+      .then( toast.success('Quantity updated', {autoClose: 1000, limit: 1}))
       .then(data => setProducts(data))
       .catch(error => console.error(error));
   };
@@ -48,6 +51,7 @@ const StudentCart = () => {
   return (
     
     <div className="cart-container">
+      <ToastContainer />
     <h1>Cart of User {localStorage.getItem('student')}  </h1>
     <h2> Vendor Name: {localStorage.getItem('vendorName')}</h2>
     <table>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 //import { get } from "../../server/routes/api/users";
 import './student.css'
 
@@ -11,7 +12,8 @@ const StudentLoginPage = () => {
   if (isAuthenticated === false) {
       history.push("/student/login")
   }
-
+  
+  
 
  
 
@@ -22,6 +24,7 @@ const [vendors, setVendors] = useState([]);
     fetch('/vendors/names')
       .then(res => res.json())
       .then(data => setVendors(data))
+      //.then(toast.success('Logged in', {autoClose: 1000, limit: 1}))
       .catch(err => console.error(err));
   }, []);
 
@@ -29,6 +32,7 @@ const [vendors, setVendors] = useState([]);
   // Render the list of vendors
   return (
     <div className="welcome-container">
+      <ToastContainer />
   <h1 className="welcome-title">Welcome {userName}</h1>
   <br/><br/>
   <h2 className="vendor-list-title">List of Vendors</h2>
