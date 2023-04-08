@@ -63,7 +63,7 @@ const VendorLoginPage = () => {
                 <button type="submit" onClick={handleSubmit}>Submit</button>
             </form>
             <br />
-            <a href='/vendor/signup'>SignUP</a>
+            <a href='/vendor/signup'>Sign Up</a>
         </div>
 
     );

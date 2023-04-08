@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 90vh;
 }
 .login-container {
   background-color: #fff;
@@ -14,12 +14,15 @@
   padding: 20px;
   max-width: 500px;
   margin: auto;
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .login-header {
-  font-size: 36px;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
 }
 
 .login-form {
@@ -35,42 +38,47 @@ label {
   margin-bottom: 10px;
 }
 
-input {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 5px;
-  font-size: 16px;
+input[type="text"],
+input[type="password"] {
   width: 100%;
-  max-width: 400px;
+  padding: 0.5rem;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
 }
 
 button[type="submit"] {
-  background-color: #007bff;
+  padding: 0.5rem 1rem;
+  background-color: #0077cc;
   color: #fff;
-  padding: 10px;
   border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-top: 20px;
+  border-radius: 3px;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+button[type="submit"]:hover {
+  background-color: #005ea8;
 }
 
 a {
+  color: #0077cc;
   text-decoration: none;
-  color: #007bff;
-  margin-top: 20px;
-  font-size: 16px;
+  margin-top: 1rem;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 85vh;
+  background: linear-gradient(to bottom, #FFFFFF, #F2F2F2);
+}
+
   
   .login-header {
     font-size: 2rem;
@@ -82,6 +90,7 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
   }
   
    .login-page {
@@ -92,7 +101,7 @@ a {
     
   
   h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     
     text-align: center;
   }
@@ -104,9 +113,10 @@ a {
 
   .login-buttons {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 600px;
+  margin: 0 auto;
   }
   
   label {
@@ -138,18 +148,48 @@ a {
     border-top: 3px solid #0077cc; /* add a 3px solid border on the top of the header */
   }
   .my-button {
-    background-color: #4CAF50; /* Green */
+    background: linear-gradient(to bottom right, #008CBA, #0077A6);
     border: none;
     color: white;
-    padding: 15px 32px;
+    padding: 20px 30px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-    margin: 250px 2px;
-    margin-left: 300px;
+    font-size: 24px;
+    margin: 10px;
     cursor: pointer;
+    border-radius: 50px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
   }
+  
+  button:hover {
+    background-color: #00698C;
+    transform: translateY(-3px);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  button:active {
+    transform: translateY(0px);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  button:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 2px #008CBA;
+  }
+  button:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    width: 10px;
+    height: 10px
+  }
+
   .my-button2 {
     background-color: #4CAF50; /* Green */
     border: none;
