@@ -43,7 +43,7 @@ function VendorAddItemPage() {
     
     <form onSubmit={handleSubmit}>
       <div id="name-input">
-      <h1>Add Item</h1>
+      <h1 className='additem'>Add Item</h1>
       <label htmlFor="name-input">
         Name:
         <input type="text" value={itemName} onChange={(event) => setName(event.target.value)} />

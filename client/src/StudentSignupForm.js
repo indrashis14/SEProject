@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const StudentSignupForm = () => {
   const [userName, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
+  const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,7 +24,8 @@ const StudentSignupForm = () => {
       })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => console.log(data),
+          history.push('/student/login'))
     .catch(error => console.error(error));
 
     setUsername('');

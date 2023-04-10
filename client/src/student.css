@@ -1,15 +1,33 @@
 .welcome-title {
-    font-size: 2.5rem;
-    text-align: center;
-    color: #333;
-    margin-bottom: 1rem;
+  background-color: #AFEEEE;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  animation: color-change 5s infinite;
+  }
+  @keyframes color-change {
+    0% { background-color: #AFEEEE; }
+    50% { background-color: #00CED1; }
+    100% { background-color: #AFEEEE; }
   }
   
+  
   .vendor-list-title {
-    font-size: 1.5rem;
+    background-color: #00CED1;
+    color: #fff;
+    padding: 15px;
     text-align: center;
-    color: #555;
-    margin-bottom: 2rem;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 2px solid #fff;
+    animation: color-change 5s infinite;
+  }
+  @keyframes color-change {
+    0% { background-color: #00CED1; }
+    50% { background-color: #20B2AA; }
+    100% { background-color: #00CED1; }
   }
   
 .vendor-list {

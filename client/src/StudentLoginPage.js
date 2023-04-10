@@ -41,7 +41,7 @@ const [vendors, setVendors] = useState([]);
       <Link className="vendor-link" to={`/student/${vendor._id}/items`}>{vendor.storeName}</Link>
     </p>
   ))}
-  <a className="button" href="/student/cart">View Cart</a>
+  <a className="button" align="center"href="/student/cart">View Cart</a>
 </div>
   );
  

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-
+import { useHistory } from 'react-router-dom';
 const VendorSignupPage = () => {
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
     const [storeName,setStorename] = useState('');
-
+    const history = useHistory();
     const handleSubmit = (event) => {
         event.preventDefault();
 
@@ -24,7 +24,8 @@ const VendorSignupPage = () => {
             })
         })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => console.log(data),
+                  history.push('/vendor/login'))
             .catch(error => console.error(error));
 
         setUsername('');
