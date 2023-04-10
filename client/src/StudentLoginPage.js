@@ -21,7 +21,7 @@ const [vendors, setVendors] = useState([]);
 
   // Fetch data from API using fetch
   useEffect(() => {
-    fetch('/vendors/names')
+    fetch('/api/vendors/names')
       .then(res => res.json())
       .then(data => setVendors(data))
       //.then(toast.success('Logged in', {autoClose: 1000, limit: 1}))

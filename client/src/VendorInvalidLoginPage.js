@@ -11,7 +11,7 @@ const VendorLoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch('http://localhost:5000/vendor/login', {
+        fetch('/api/vendors/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

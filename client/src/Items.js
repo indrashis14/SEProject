@@ -12,7 +12,7 @@ function Items() {
 
   useEffect(() => {
     async function fetchItems() {
-      const res = await fetch(`/student/${vendorid}/items`);
+      const res = await fetch(`/api/vendors/get-items/${vendorid}`);
       const data = await res.json();
       console.log(data);
       setItems(data);

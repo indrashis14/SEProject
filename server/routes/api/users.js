@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const keys = require('../../config/keys');
-const passport = require('passport');
 const {check,validationResult }= require('express-validator');
 const config=require('config');
 const mongoose=require('mongoose');
@@ -14,11 +11,12 @@ const mongoose=require('mongoose');
 const User = require('../../models/User');
 const Cart = require("../../models/Cart");
 const Order = require('../../models/Order');
+const VendorItems = require('../../models/VendorItem');
 mongoose.model('User', User.schema);
 
 
 
-const VendorItems = require('../../models/VendorItem');
+
 
 // @route   GET api/users/test2
 // @desc    Tests users route
@@ -32,11 +30,18 @@ router.post('/register',[check('userName','Please provide name').not().isEmpty()
   check('email','Please input valid email id').isEmail(),
   check('password','Enter valid password').not().isEmpty(),
   check('mobile','Enter valid number').isNumeric()],
-   (req, res) => {
+   async (req, res) => {
 const errors=validationResult(req);
 if(!errors.isEmpty()){
 return res.status(400).json({errors:errors.array()});}
 const { userName, email, password, mobile } = req.body;
+
+
+  const existingUser = await User.findOne({ userName });
+  if (existingUser) {
+    return res.status(400).json({ message: 'User already exists with that username' });
+  }
+
 
 const user = new User({
 userName,
@@ -62,29 +67,26 @@ router.post('/login', async(req, res) => {
   const { userName, password } = req.body;
   if (!userName || !password) {
     return res.status(400).json({ "result": "invalid data" });
-}
-const user = await User.findOne({ userName: userName })
-if (user) {
+  }
+
+  const user = await User.findOne({ userName: userName });
+  if (user) {
     bcrypt.compare(password, user.password, function (error, result) {
-        if (error) {
-            console.error(error)
-        }
-        if (result) {
-            console.log("Passwords match!")
-            res.json({ 'isLoggedIn': true, 'id': user._id })
-        }
-        else {
-            console.log("Passwords don't match!")
-            res.json({ 'isLoggedIn': false, 'id': user._id })
-            res.status(400).json('Error: password mismatch')
-        }
-    })
-}
-
-
-  
-
-
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ "result": "server error" });
+      }
+      if (result) {
+        console.log("Passwords match!");
+        res.json({ 'isLoggedIn': true, 'id': user._id });
+      } else {
+        console.log("Passwords don't match!");
+        res.status(400).json({ 'isLoggedIn': false,'id': user._id ,"result": "password mismatch" });
+      }
+    });
+  } else {
+    res.status(400).json({  "result": "user not found" });
+  }
 });
 
 router.get("/cart/get/:student_id/", async (req, res) => {
@@ -332,6 +334,10 @@ router.put("/orders/create/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
     const cart = await Cart.findOne({userId}).populate("products.productId");
+
+    if (cart.products.length === 0) {
+      return res.status(500).json({ error: "Cart is empty." });
+    }
     const order = new Order({
       userId: cart.userId,
       vendorId: cart.vendorId,

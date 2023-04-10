@@ -11,7 +11,7 @@ const AdminInvalidLoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch('http://localhost:5000/admin', {
+        fetch('/admin/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -20,7 +20,7 @@ function VendorAddItemPage() {
     formData.append('price', price);
     formData.append('imageData', imageData);
     try {
-      const response = await fetch(`http://localhost:5000/vendor/${localStorage.getItem('vendor_id')}/addItem`, {
+      const response = await fetch(`/api/vendors/addItem/${localStorage.getItem('vendor_id')}`, {
         method: 'POST',
         body: formData
       });

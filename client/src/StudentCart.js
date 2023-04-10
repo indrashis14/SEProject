@@ -58,13 +58,21 @@ const StudentCart = () => {
         products: products
       })
     })
-      .then(response => response.json())
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.json().then(body => {
+          throw new Error(body.error);
+        });
+      }
+    })
       .then(data => {
         toast.success('Order created successfully!', { autoClose: 2000 });
         setProducts([]);
       })
       .catch(error => {console.error(error);
-        toast('Order failed!', { autoClose: 2000 });
+        toast.error('Order failed! '+error.message, { autoClose: 2000 });
       });
   }
 

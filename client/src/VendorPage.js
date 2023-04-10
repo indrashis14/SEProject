@@ -27,7 +27,7 @@ const VendorPage = () => {
       useEffect(() => {
     const vendor_id = localStorage.getItem('vendor_id');
 
-    fetch(`http://localhost:5000/vendor/${vendor_id}/`)
+    fetch(`/api/vendors/get/${vendor_id}/`)
       .then(response => response.json())
       .then(data => {
         console.log("vendor data:", data)
@@ -48,7 +48,7 @@ const VendorPage = () => {
 
         const vendor_id = localStorage.getItem('vendor_id');
 
-    fetch(`api/users/orders/new/${vendor_id}`)
+    fetch(`/api/users/orders/new/${vendor_id}`)
       .then(response => response.json())
       .then(data => {
         console.log("order data:", data)
@@ -63,7 +63,7 @@ const VendorPage = () => {
         setSelectedNavItem('currentOrders');
 
         const vendor_id = localStorage.getItem('vendor_id');
-        fetch(`api/users/orders/accepted/${vendor_id}`)
+        fetch(`/api/users/orders/accepted/${vendor_id}`)
       .then(response => response.json())
       .then(data => {
         console.log("order data:", data)
@@ -79,7 +79,7 @@ const VendorPage = () => {
         setSelectedNavItem('fulfilledOrders');
         const vendor_id = localStorage.getItem('vendor_id');
 
-    fetch(`api/users/orders/fulfilled/${vendor_id}`)
+    fetch(`/api/users/orders/fulfilled/${vendor_id}`)
       .then(response => response.json())
       .then(data => {
         console.log("order data:", data)
@@ -100,7 +100,7 @@ const VendorPage = () => {
   const handleAcceptOrder = async (order) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`api/users/accept-order/${order._id}`, {
+      const res = await fetch(`/api/users/accept-order/${order._id}`, {
         method: 'PUT',
       });
       const data = await res.json();
@@ -108,7 +108,7 @@ const VendorPage = () => {
       console.log(data);
 
       const vendor_id = localStorage.getItem('vendor_id');
-    fetch(`api/users/orders/new/${vendor_id}`)
+    fetch(`/api/users/orders/new/${vendor_id}`)
       .then(response => response.json())
       .then(data => {
         console.log("current orders data:", data)
@@ -129,7 +129,7 @@ const VendorPage = () => {
   const handleFulfillOrder = async (order) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`api/users/fulfill-order/${order._id}`, {
+      const res = await fetch(`/api/users/fulfill-order/${order._id}`, {
         method: 'PUT',
       });
       const data = await res.json();
@@ -137,7 +137,7 @@ const VendorPage = () => {
       console.log(data);
 
       const vendor_id = localStorage.getItem('vendor_id');
-    fetch(`api/users/orders/accepted/${vendor_id}`)
+    fetch(`/api/users/orders/accepted/${vendor_id}`)
       .then(response => response.json())
       .then(data => {
         console.log("current orders data:", data)
