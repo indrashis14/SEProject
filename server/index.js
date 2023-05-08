@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const {check,validationResult }= require('express-validator');
 const config=require('config');
 const multer = require('multer');
+require("dotenv").config();
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
@@ -39,4 +40,4 @@ app.use(bodyParser.json());
 
 
 
-app.listen(5000, () => { console.log("Server listening on port 5000") });
+app.listen(process.env.PORT || 5000, () => { console.log("Connected") });

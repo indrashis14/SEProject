@@ -1,17 +1,13 @@
 .heading {
-    background-color: #AFEEEE;
+    background-color: #15a1a1;
     color: white;
     padding: 20px;
     text-align: center;
     font-size: 36px;
     font-weight: bold;
-    animation: color-change 5s infinite;
+   
 }
-@keyframes color-change {
-    0% { background-color: #AFEEEE; }
-    50% { background-color: #00CED1; }
-    100% { background-color: #AFEEEE; }
-  }
+
 
 .container {
     margin-left: 100px;
@@ -77,8 +73,8 @@
 
 .toggle-btn input[type=checkbox] {
     opacity: 0;
-    width: 0;
-    height: 0;
+    width: 40px;
+    height: 20px;
 }
 
 .toggle-btn .slider {

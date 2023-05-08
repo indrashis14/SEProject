@@ -160,7 +160,7 @@ const VendorPage = () => {
             {vendorData
                 ? <div className="container">
                     <ToastContainer />
-                    <h1 className="heading">Welcome {vendorData['userName']}</h1>
+                    <h1 className="heading">Welcome {vendorData['storeName']}</h1>
                     <div id="navbar">
                         <div onClick={showMenu} className={`navitem ${selectedNavItem === 'menu' ? 'selected' : ''}`}>Menu</div>
                         <div onClick={showOrderRequests} className={`navitem ${selectedNavItem === 'orderRequests' ? 'selected' : ''}`}>New Orders</div>
